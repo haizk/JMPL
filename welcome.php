@@ -84,20 +84,20 @@ $row = $result->fetch_assoc();
                                 </div>
 
                                 <?php if ($row["secret"] == null) : ?>
-                                    <p class="text-white mb-4"><a class="btn btn-danger btn-lg" href="activate2fa.php">Activate 2FA</a></p>
+                                    <p class="text-white mb-4"><a class="btn btn-light btn-lg" href="activate2fa.php" style="width: 200px;"><b style="color: #ff3300;">Activate 2FA</b></a></p>
                                 <?php else : ?>
                                     <p class="text-white mb-4">
-                                        <a class="btn btn-warning btn-lg" href="#" onclick="confirmDeactivate()">Deactivate 2FA</a>
+                                        <a class="btn btn-light btn-lg" href="#" onclick="confirmDeactivate()" style="width: 200px;"><b style="color: #ff3300;">Deactivate 2FA</b></a>
                                     </p>
                                     <form id="deactivateForm" action="deactivate2fa.php" method="post" style="display: none;">
                                         <input type="hidden" name="confirm_deactivate" value="1">
                                     </form>
                                 <?php endif; ?>
 
-                                <p><a class="btn btn-outline-light btn-lg px-5" href="logout.php">Log out</a></p>
+                                <p><a class="btn btn-outline-light btn-lg px-5" href="logout.php" style="width: 200px;"><b>Log out</b></a></p>
                             </div>
                             <div>
-                                <p class="mb-0 text-white">All users are suggested to activate Two-Factor Authentication</p>
+                                <p class="mb-0 text-white">All users are suggested to activate 2FA Authentication</p>
                                 <small>M0521030</small>
                                 <small>Hezkiel Bram Setiawan</small>
                             </div>
