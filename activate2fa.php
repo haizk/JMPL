@@ -57,7 +57,7 @@ if (isset($_POST["submit"])) {
     <section class="vh-100">
         <div class="container h-100">
             <div class="row h-100 justify-content-center align-items-center">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5 card-container">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5 card-container justify-content-center align-items-center">
                     <div class="card border-5 text-white pb-3 px-4">
                         <div class="card-body text-center content-container">
                             <div class="mb-md-5 mt-md-4 content-scroll">

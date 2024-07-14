@@ -42,40 +42,67 @@ if (isset($_POST["submit"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2FA Verification- JMPL</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet">
+    <title>2FA Verification - JMPL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        .card-container {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-card {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .content-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content-scroll {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="stars"></div>
     <section class="vh-100">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="d-flex justify-content-center mt-5">
-                            <img src="img/welcome.png" alt="login form" class="img-fluid" style="width: 100px;" />
-                        </div>
-                        <div class="card-body p-5 text-center">
-                            <div class="mb-md-4 md-4 pb-5">
-                                <h2 class="fw-bold mb-4 text-uppercase">CHECK THE AUTHENTICATOR APP</h2>
-                                <form action="" method="post">
-                                    <div class="form-group">
-                                        <label for="2fa" class="mb-2">Enter Code Below</label>
-                                        <input type="text" name="2fa" id="2fa" class="form-control form-control-lg mb-3" required>
+        <div class="container h-100">
+            <div class="row h-100 justify-content-center align-items-center">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5 card-container justify-content-center align-items-center">
+                    <div class="card border-5 text-white">
+                        <div class="card-body p-5 text-center content-container">
+                            <div class="mb-md-5 mt-md-4 mb-0 content-scroll">
+                                <h2 class="fw-bold mb-2 text-uppercase">2FA Verification</h2>
+                                <p class="text-white mb-5">Check your Authenticator App for the code.</p>
+
+                                <div class="d-flex justify-content-center mb-4">
+                                    <img src="img/welcome.png" alt="welcome image" class="img-fluid" style="width: 100px;" />
+                                </div>
+                                <?php if ($errorMessage != "") : ?>
+                                    <div class="alert alert-danger" role="alert">
+                                        <?php echo htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8'); ?>
                                     </div>
-                                    <?php if ($errorMessage != "") : ?>
-                                        <div class="alert alert-danger" role="alert">
-                                            <?php echo htmlspecialchars($errorMessage, ENT_QUOTES, 'UTF-8'); ?>
-                                        </div>
-                                    <?php endif; ?>
-                                    <button type="submit" name="submit" class="btn btn-outline-light btn-lg px-5">Login</button>
-                                    <p class="mt-2"><a class="text-danger" href="logout.php">Go back</a></p>
+                                <?php endif; ?>
+                                <form action="" method="post">
+                                    <div class="form-outline form-white mb-3">
+                                        <input type="text" name="2fa" id="2fa" class="form-control form-control-lg" required>
+                                        <label class="form-label pt-2" for="2fa">Enter 2FA Code</label>
+                                    </div>
+                                    <button type="submit" name="submit" class="btn btn-outline-light btn-lg px-5" style="width: 200px;"><b>Verify</b></button>
                                 </form>
+
+                                <p class="mt-4"><a class="btn btn-light btn-lg px-5" href="logout.php" style="width: 200px;"><b style="color: #ff3300;">Relogin</b></a></p>
                             </div>
-                            <div class="d-flex justify-content-center mt-4 pt-1">
-                                <p class="text-white-50">We hope you had not erased the 2FA account earlier.<br>Didn't ya?</p>
+                            <div>
+                                <small>M0521030</small>
+                                <small>Hezkiel Bram Setiawan</small>
                             </div>
                         </div>
                     </div>
@@ -83,6 +110,7 @@ if (isset($_POST["submit"])) {
             </div>
         </div>
     </section>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 
 </html>
