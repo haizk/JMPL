@@ -101,8 +101,8 @@ function register($conn, $user, $pass, $email)
                                             <button class="btn btn-light btn-lg btn-block" type="submit" name="submit"><b style="color: #ff3300;">Register</b></button>
                                         </div>
                                         <p class="pb-lg-2 small">Already have an account? <a href="index.php" class="text-white"><b>Login here</b></a></p>
-                                        <small>M0521023</small>
-                                        <small>Gentur Sahadewa</small>
+                                        <small>M0521030</small>
+                                        <small>Hezkiel Bram Setiawan</small>
                                     </form>
                                 </div>
                             </div>
