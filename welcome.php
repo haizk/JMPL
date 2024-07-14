@@ -78,7 +78,7 @@ $row = $result->fetch_assoc();
                             <div class="mb-md-5 mt-md-4 content-scroll">
                                 <h2 class="fw-bold mb-2 text-uppercase">Welcome, <?php echo htmlspecialchars($user); ?>!</h2>
                                 <p class="text-white mb-3">I long for a worthy opponent.<br>Talent, honor, discipline... and pretty pictures!</p>
-
+                                <a class="btn btn-light btn-lg mb-3" href="blog.php" style="width: 200px;"><b style="color: #ff3300;">Blog</b></a>
                                 <div class="d-flex justify-content-center mb-4">
                                     <img src="img/welcome.png" alt="welcome image" class="img-fluid" style="width: 100px;" />
                                 </div>
