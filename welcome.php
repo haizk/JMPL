@@ -32,7 +32,7 @@ $row = $result->fetch_assoc();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Welcome - JMPL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
@@ -74,10 +74,10 @@ $row = $result->fetch_assoc();
             <div class="row h-100 justify-content-center align-items-center">
                 <div class="col-12 col-md-8 col-lg-6 col-xl-5 card-container">
                     <div class="card border-5 text-white">
-                        <div class="card-body p-5 text-center content-container">
+                        <div class="card-body p-3 px-5 pb-5 text-center content-container">
                             <div class="mb-md-5 mt-md-4 content-scroll">
                                 <h2 class="fw-bold mb-2 text-uppercase">Welcome, <?php echo htmlspecialchars($user); ?>!</h2>
-                                <p class="text-white mb-5">Welcome Legion in most-likely vulnerable website.<br>Hope you enjoy.</p>
+                                <p class="text-white mb-3">I long for a worthy opponent.<br>Talent, honor, discipline... and pretty pictures!</p>
 
                                 <div class="d-flex justify-content-center mb-4">
                                     <img src="img/welcome.png" alt="welcome image" class="img-fluid" style="width: 100px;" />
@@ -97,7 +97,7 @@ $row = $result->fetch_assoc();
                                 <p><a class="btn btn-outline-light btn-lg px-5" href="logout.php" style="width: 200px;"><b>Log out</b></a></p>
                             </div>
                             <div>
-                                <p class="mb-0 text-white">All users are suggested to activate 2FA Authentication</p>
+                                <p class="mb-0 text-white">Please activate 2FA Authentication</p>
                                 <small>M0521030</small>
                                 <small>Hezkiel Bram Setiawan</small>
                             </div>
@@ -107,7 +107,6 @@ $row = $result->fetch_assoc();
             </div>
         </div>
     </section>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

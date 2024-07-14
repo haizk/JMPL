@@ -18,7 +18,6 @@ if (isset($_SESSION['secret'])) {
     $_SESSION['secret'] = $secret;
 }
 
-// hide var_dump on display
 ob_start();
 var_dump($authenticator->getCode($secret));
 ob_end_clean();
@@ -35,12 +34,12 @@ if (isset($_POST["submit"])) {
         mysqli_query($conn, "UPDATE user SET secret = '$secret' WHERE username = '$user'");
         unset($_SESSION["secret"]);
         header("Location: welcome.php");
+        exit();
     } else {
-        echo "Invalid code. Please try again.";
+        $error_message = "Invalid code. Please try again.";
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,36 +47,45 @@ if (isset($_POST["submit"])) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Activate 2FA</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css" rel="stylesheet">
+    <title>Activate 2FA - JMPL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <div class="stars"></div>
     <section class="vh-100">
-        <div class="container py-5 h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                    <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                        <div class="d-flex justify-content-center mt-5">
-                            <img src="<?php echo htmlspecialchars($authenticator->getQRCodeGoogleUrl('JMPL', $secret), ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code" style="width: 200px;" />
-                        </div>
-                        <div class="card-body p-5 text-center">
-                            <div class="mb-1 md-5 mt-md-4 pb-5">
-                                <h2 class="fw-bold text-uppercase">Scan for code</h2>
-                                <div class="d-flex justify-content-center mb-3">
-                                    <p class="text-white-50">Please open your Google Authenticator<br>to enable Two-Factor Authentication</p>
+        <div class="container h-100">
+            <div class="row h-100 justify-content-center align-items-center">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5 card-container">
+                    <div class="card border-5 text-white pb-3 px-4">
+                        <div class="card-body text-center content-container">
+                            <div class="mb-md-5 mt-md-4 content-scroll">
+                                <h2 class="fw-bold mb-2 text-uppercase">Activate 2FA</h2>
+                                <p class="text-white mb-3">Scan the QR code to enable Two-Factor Authentication</p>
+
+                                <div class="d-flex justify-content-center mb-4">
+                                    <img src="<?php echo htmlspecialchars($authenticator->getQRCodeGoogleUrl('JMPL', $secret), ENT_QUOTES, 'UTF-8'); ?>" alt="QR Code" style="width: 200px;" />
                                 </div>
-                                <form action="" method="post">
-                                    <div class="form-group mb-4">
-                                        <input type="text" name="2fa" id="2fa" class="form-control form-control-lg mb-3" required placeholder="Enter code here">
+
+                                <?php if (isset($error_message)) : ?>
+                                    <div class="alert alert-danger" role="alert">
+                                        <?php echo $error_message; ?>
                                     </div>
-                                    <button type="submit" name="submit" class="btn btn-outline-light btn-lg px-5">Activate</button>
+                                <?php endif; ?>
+
+                                <form action="" method="post">
+                                    <div class="form-outline form-white mb-3">
+                                        <input type="text" name="2fa" id="2fa" class="form-control form-control-lg" required>
+                                        <label class="form-label pt-2" for="2fa">Enter 2FA Code</label>
+                                    </div>
+                                    <button type="submit" name="submit" class="btn btn-outline-light btn-lg px-5" style="width: 200px;"><b>Activate</b></button>
                                 </form>
+                                <p class="mt-4"><a class="btn btn-light btn-lg px-5" href="welcome.php" style="width: 200px;"><b style="color: #ff3300;">Go Back</b></a></p>
                             </div>
-                            <div class="d-flex justify-content-center">
-                                <p class="text-white">Not sure to activate 2FA? <a href="welcome.php" class="text-danger">Go back</a></p>
+                            <div>
+                                <small>M0521030</small>
+                                <small>Hezkiel Bram Setiawan</small>
                             </div>
                         </div>
                     </div>
@@ -85,7 +93,6 @@ if (isset($_POST["submit"])) {
             </div>
         </div>
     </section>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
 </body>
 
 </html>
