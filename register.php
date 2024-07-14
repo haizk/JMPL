@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Check if the user is already logged in
 if (isset($_SESSION["user"])) {
     header("Location: welcome.php");
     exit();
@@ -10,37 +9,43 @@ if (isset($_SESSION["user"])) {
 $errorMessage = "";
 
 if (isset($_POST["submit"])) {
-    $errorMessage = register($_POST);
+    $user = htmlspecialchars($_POST["user"]);
+    $pass = htmlspecialchars($_POST["pass"]);
+    $email = htmlspecialchars($_POST["email"]);
+    $conn = mysqli_connect("localhost", "root", "", "jmpl");
+
+    $errorMessage = register($conn, $user, $pass, $email);
 }
 
-function register($data)
+function register($conn, $user, $pass, $email)
 {
-    $conn = mysqli_connect("localhost", "root", "", "jmpl");
-    $user = htmlspecialchars($data["user"]);
-    $pass = htmlspecialchars($data["pass"]);
-    $email = htmlspecialchars($data["email"]);
-
-    // Check if username or email already exists
     $stmt = $conn->prepare("SELECT * FROM user WHERE username = ? OR email = ?");
     $stmt->bind_param("ss", $user, $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
+        $_SESSION["attempt"]++;
         return "Username or email already exists.";
     }
 
-    // Validate password length
     if (strlen($pass) < 8) {
+        $_SESSION["attempt"]++;
         return "Password must be at least 8 characters long.";
-    } else {
-        // Hash the password
-        $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("INSERT INTO user (username, pass, email) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $user, $hashedPass, $email);
-        $stmt->execute();
-        header("Location: index.php");
+    }
+
+    $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
+    $stmt = $conn->prepare("INSERT INTO user (username, pass, email) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $user, $hashedPass, $email);
+
+    if ($stmt->execute()) {
+        $_SESSION["attempt"] = 0;
+        $_SESSION["user"] = $user;
+        header("Location: welcome.php");
         exit();
+    } else {
+        $_SESSION["attempt"]++;
+        return "Registration failed. Please try again.";
     }
 }
 ?>
@@ -55,6 +60,7 @@ function register($data)
     <title>Register</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
@@ -63,43 +69,45 @@ function register($data)
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-xl-10">
-                    <div class="card">
+                    <div class="card border-5 d-flex justify-content-center align-items-center p-4">
                         <div class="row g-0">
                             <div class="col-md-6 col-lg-7 d-flex align-items-center">
-                                <div class="card-body p-4 p-lg-5 text-black">
-                                    <form action="" method="post">
-                                        <div class="d-flex align-items-center mb-3 pb-1">
-                                            <span class="h1 fw-bold mb-0">JMPL Register Page</span>
+                                <div class="card-body text-white p-2">
+                                    <form id="register-form" action="" method="post">
+                                        <div class="d-flex align-items-center pb-1">
+                                            <span class="h1 fw-bold mb-0">Register</span>
                                         </div>
                                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Create your account</h5>
-                                        <div class="form-outline mb-2">
+                                        <div class="form-outline mb-4">
                                             <label class="form-label" for="email">Email</label>
-                                            <input type="email" name="email" id="email" class="form-control form-control-lg" required placeholder="Enter your email" />
+                                            <input type="email" name="email" id="email" class="form-control form-control-lg" required />
                                         </div>
-                                        <div class="form-outline mb-2">
+                                        <div class="form-outline mb-4">
                                             <label class="form-label" for="user">Username</label>
-                                            <input type="text" name="user" id="user" class="form-control form-control-lg" required placeholder="Enter username" />
+                                            <input type="text" name="user" id="user" class="form-control form-control-lg" required />
                                         </div>
-                                        <div class="form-outline mb-2">
+                                        <div class="form-outline mb-4">
                                             <label class="form-label" for="pass">Password</label>
-                                            <input type="password" name="pass" id="pass" class="form-control form-control-lg" required placeholder="Enter password" />
+                                            <input type="password" name="pass" id="pass" class="form-control form-control-lg" required />
                                         </div>
                                         <?php
                                         if ($errorMessage != "") {
-                                            echo "<div class='alert alert-danger' role='alert'>" . htmlspecialchars($errorMessage) . "</div>";
+                                            echo "<div class='alert alert-danger' role='alert'>";
+                                            echo htmlspecialchars($errorMessage);
+                                            echo "</div>";
                                         }
                                         ?>
-                                        <div class="pt-1 mb-4">
-                                            <button class="btn btn-dark btn-lg btn-block" type="submit" name="submit">Register Now</button>
+                                        <div class="pt-3 mb-4">
+                                            <button class="btn btn-light btn-lg btn-block" type="submit" name="submit"><b style="color: #ff3300;">Register</b></button>
                                         </div>
-                                        <p class="mb-5 pb-lg-2" style="color: #393f81;">Already have an account? <a href="index.php" style="color: #393f81;">Login here</a></p>
-                                        <a href="#!" class="small text-muted">M0521023.</a>
-                                        <a href="#!" class="small text-muted">Gentur Sahadewa</a>
+                                        <p class="pb-lg-2 small">Already have an account? <a href="index.php" class="text-white"><b>Login here</b></a></p>
+                                        <small>M0521023</small>
+                                        <small>Gentur Sahadewa</small>
                                     </form>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-lg-5 d-none d-md-block">
-                                <img src="img/image.png" alt="login form" class="img-fluid p-10" style="height:100%;" />
+                            <div class="col-md-6 col-lg-5 p-2 d-flex align-items-center">
+                                <img src="img/image.png" alt="register form" class="img-fluid" />
                             </div>
                         </div>
                     </div>
@@ -107,7 +115,6 @@ function register($data)
             </div>
         </div>
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 

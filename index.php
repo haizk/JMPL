@@ -38,15 +38,17 @@ if (isset($_POST["user"]) && isset($_POST["pass"])) {
     $user = htmlspecialchars($_POST["user"]);
     $pass = htmlspecialchars($_POST["pass"]);
     $conn = mysqli_connect("localhost", "root", "", "jmpl");
-    $row = mysqli_query($conn, "SELECT * FROM user WHERE username = '$user'");
-    $result = mysqli_fetch_assoc($row);
+    $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?");
+    $stmt->bind_param("s", $user);
+    $stmt->execute();
+    $result = $stmt->get_result()->fetch_assoc();
 
     if ($_SESSION["attempt"] > 2) {
         $recaptcha = $_POST['g-recaptcha-response'];
         if (!verifyRecaptcha($recaptcha)) {
             $errorMessage = "Invalid captcha.";
             $_SESSION["attempt"]++;
-        } else if (!empty($result["pass"])) {
+        } else if ($result) {
             if (password_verify($pass, $result["pass"])) {
                 $_SESSION["attempt"] = 0;
                 $_SESSION["user"] = $user;
@@ -65,7 +67,7 @@ if (isset($_POST["user"]) && isset($_POST["pass"])) {
             $_SESSION["attempt"]++;
             $errorMessage = "Username not found.";
         }
-    } else if (!empty($result["pass"])) {
+    } else if ($result) {
         if (password_verify($pass, $result["pass"])) {
             $_SESSION["attempt"] = 0;
             $_SESSION["user"] = $user;
@@ -137,7 +139,7 @@ if (isset($_POST["user"]) && isset($_POST["pass"])) {
                                             <button class="btn btn-light btn-lg btn-block" type="submit" name="submit"><b style="color: #ff3300;">Login</b></button>
                                         </div>
                                         <a class="small text-white" href="forgot.php"><b>Forgot password?</b></a>
-                                        <p class=" pb-lg-2 small">Don't have an account? <a href="register.php" class="text-white"><b>Register here</b></a></p>
+                                        <p class="pb-lg-2 small">Don't have an account? <a href="register.php" class="text-white"><b>Register here</b></a></p>
                                         <small>M0521030</small>
                                         <small>Hezkiel Bram Setiawan</small>
                                     </form>
