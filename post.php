@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-if (!isset($_SESSION["user"])) {
-    header("Location: index.php");
-    exit();
-}
-
-$user = htmlspecialchars($_SESSION["user"], ENT_QUOTES, 'UTF-8');
 $conn = mysqli_connect("localhost", "root", "", "jmpl");
 
 if (!$conn) {
@@ -27,11 +21,6 @@ $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $post_id);
 $stmt->execute();
 $result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    header("Location: blog.php");
-    exit();
-}
 
 $post = $result->fetch_assoc();
 ?>

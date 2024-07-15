@@ -76,14 +76,12 @@ class LoginHandlerTest extends TestCase
 
     protected function setUp(): void
     {
-        // Simulate a database connection
         $dbHost = 'localhost';
         $dbUser = 'root';
         $dbPass = '';
         $dbName = 'jmpl';
         $recaptchaSecret = 'dummy_secret';
 
-        // Create an instance of the class
         $this->loginHandler = new LoginHandler($dbHost, $dbUser, $dbPass, $dbName, $recaptchaSecret);
     }
 
@@ -91,14 +89,11 @@ class LoginHandlerTest extends TestCase
     {
         $_SESSION['attempt'] = 0;
 
-        // Mock user data
         $user = 'haizk';
         $pass = 'haizk1234';
 
-        // Assume the password in the database is hashed using password_hash
         $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
 
-        // Mock database result
         $this->mockDatabaseResult($user, $hashedPass);
 
         $result = $this->loginHandler->checkLogin($user, $pass);
@@ -111,15 +106,13 @@ class LoginHandlerTest extends TestCase
     {
         $_SESSION['attempt'] = 0;
 
-        // Mock user data
         $user = 'haizk';
-        $pass = 'wrong';
+        $pass = 'wrongPass';
 
-        // Assume the password in the database is hashed using password_hash
-        $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
+        $correctPass = 'correctPassword';
+        $hashedCorrectPass = password_hash($correctPass, PASSWORD_DEFAULT);
 
-        // Mock database result
-        $this->mockDatabaseResult($user, $hashedPass);
+        $this->mockDatabaseResult($user, $hashedCorrectPass);
 
         $result = $this->loginHandler->checkLogin($user, $pass);
 
@@ -131,11 +124,9 @@ class LoginHandlerTest extends TestCase
     {
         $_SESSION['attempt'] = 0;
 
-        // Mock user data
         $user = 'nonExistentUser';
         $pass = 'testPass';
 
-        // Mock database result to return no rows
         $this->mockDatabaseResult(null, null);
 
         $result = $this->loginHandler->checkLogin($user, $pass);
@@ -159,7 +150,6 @@ class LoginHandlerTest extends TestCase
             $result->method('fetch_assoc')->willReturn(null);
         }
 
-        // Use reflection to set the private $conn property
         $reflection = new \ReflectionClass($this->loginHandler);
         $property = $reflection->getProperty('conn');
         $property->setAccessible(true);
